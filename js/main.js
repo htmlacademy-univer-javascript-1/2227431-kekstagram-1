@@ -1,9 +1,9 @@
-import {getPictureFragment} from './get_pictures_fragment_use_case.js';
+import { getPicturesFragment } from './use-cases/get-pictures-fragment.js';
 
 const picturesList = document.querySelector('.pictures');
 
 const init = () => {
-  picturesList.appendChild(getPictureFragment);
+  picturesList.append(getPicturesFragment());
 };
 
 init();
