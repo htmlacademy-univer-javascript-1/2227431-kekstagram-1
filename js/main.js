@@ -1,4 +1,9 @@
-import { createPhotos } from './data';
+import {getPictureFragment} from './get_pictures_fragment_use_case.js';
 
-// eslint-disable-next-line no-console
-console.log(createPhotos());
+const picturesList = document.querySelector('.pictures');
+
+const init = () => {
+  picturesList.appendChild(getPictureFragment);
+};
+
+init();
