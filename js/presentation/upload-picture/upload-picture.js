@@ -1,4 +1,4 @@
-import {isEscKey} from '../../utils/utils.js';
+import {isEscKey} from '../utils/utils.js';
 import {checkComment, checkHashtags} from './upload-picture-viewmodel.js';
 
 
