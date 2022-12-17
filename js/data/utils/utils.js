@@ -2,4 +2,4 @@ const getRandomInt = (from, to) => Math.floor(Math.random() * (to - from + 1)) +
 
 const canFitMaxLength = (string, maxLength) => string.length <= maxLength;
 
-export { getRandomInt, canFitMaxLength };
+export {getRandomInt, canFitMaxLength};

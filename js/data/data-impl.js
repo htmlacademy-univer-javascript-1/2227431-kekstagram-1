@@ -1,4 +1,4 @@
-import { getRandomInt } from '../utils/utils.js';
+import { getRandomInt } from './utils/utils.js';
 
 
 const COMMENTS_TEXT = [
