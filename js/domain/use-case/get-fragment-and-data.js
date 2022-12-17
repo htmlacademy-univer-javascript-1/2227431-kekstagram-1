@@ -1,5 +1,5 @@
-import { createPhotos } from '../data/data.js';
-import { openPicture } from './open-picture.js';
+import {createPhotos} from '../../data/data-impl.js';
+// import { openPicture } from './open-picture.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const getPicFromTemplate = (picture) => {
@@ -8,17 +8,18 @@ const getPicFromTemplate = (picture) => {
   newPicture.querySelector('.picture__likes').textContent = picture.likes;
   newPicture.querySelector('.picture__comments').textContent = picture.comments.length;
   newPicture.dataset.id = picture.id;
-  newPicture.addEventListener('click', () => { openPicture(picture); });
+  // newPicture.addEventListener('click', () => { openPicture(picture); });
 
   return newPicture;
 };
 
-const getPicturesFragment = () => {
+const getFragmentAndData = () => {
   const pictureFragment = document.createDocumentFragment();
-  createPhotos().forEach((it) =>
+  const photosArray = createPhotos();
+  photosArray.forEach((it) =>
     pictureFragment.append(getPicFromTemplate(it))
   );
-  return pictureFragment;
+  return {fragment: pictureFragment, array: photosArray};
 };
 
-export { getPicturesFragment };
+export {getFragmentAndData};
