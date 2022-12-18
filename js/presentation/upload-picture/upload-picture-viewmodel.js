@@ -1,3 +1,5 @@
+import {isPictureUploaded} from '../../domain/use-case/send-picture.js';
+
 const HASHTAG_REGEX = /(^#[A-Za-zА-Яа-яЁё0-9]{1,19}$)|(^$)/;
 const MAX_HASHTAGS = 5;
 const MAX_COMMENT_SIZE = 140;
@@ -64,14 +66,25 @@ const areHashtagsCorrect = (value) => {
   return hashtags.every(isHashtagCorrect);
 };
 
+const uploadPicture = (onSuccess, onFail, body) => {
+  isPictureUploaded(onFail, body).then((res) => {
+    if (res) {
+      onSuccess();
+    }
+  });
+};
+
 export {
   areHashtagsCorrect,
   areHashtagsRightAmount,
   hasNoHashtagDuplicates,
   isCommentCorrect,
+  uploadPicture,
   MAX_COMMENT_SIZE,
   ZOOM_MAX,
   ZOOM_MIN,
   ZOOM_STEP,
   EFFECTS
 };
+
+

@@ -1,5 +1,5 @@
-import {createPhotos} from '../../data/repo-impl.js';
+import {getPhotos} from '../../data/api.js';
 
-const getPhotoArray = () => createPhotos();
+const getPhotoArray = async (onFail) => await getPhotos(onFail);
 
 export {getPhotoArray};
