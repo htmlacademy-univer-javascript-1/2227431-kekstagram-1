@@ -1,6 +1,7 @@
 import {getPhotos} from '../main-viewmodel.js';
 import {openPicture} from './open-picture.js';
-import {showErrorAlert, shuffle} from '../../utils/utils.js';
+import {shuffle} from '../../utils/utils.js';
+import {showErrorAlert} from './error-alert.js';
 
 
 const DEBOUNCE_DELAY = 500;
