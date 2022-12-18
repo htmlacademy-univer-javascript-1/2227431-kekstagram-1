@@ -34,6 +34,6 @@ const initScaleSettings = () => {
   previewImageElem.style.transform = 'scale(1)';
   bnZoomOutElem.addEventListener('click', onZoomOutListener);
   bnZoomInElem.addEventListener('click', onZoomInListener);
-}
+};
 
 export {removeScaleListeners, initScaleSettings};
