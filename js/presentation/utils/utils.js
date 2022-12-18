@@ -2,6 +2,9 @@ const documentBody = document.querySelector('body');
 
 const isEscKey = (keyCode) => keyCode === 'Escape';
 
+const shuffle = function (arr) {
+  return arr.sort(() => Math.random() - 0.5);
+};
 const showErrorAlert = (message) => {
   const alertContainer = document.createElement('div');
   const alertBlock = document.createElement('div');
@@ -37,4 +40,4 @@ const showErrorAlert = (message) => {
 };
 
 
-export {isEscKey, showErrorAlert};
+export {isEscKey, showErrorAlert, shuffle};
