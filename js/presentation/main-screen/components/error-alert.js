@@ -33,4 +33,5 @@ const showErrorAlert = (message) => {
   documentBody.appendChild(alertContainer);
 };
 
-export {showErrorAlert}
+export {showErrorAlert};
+
