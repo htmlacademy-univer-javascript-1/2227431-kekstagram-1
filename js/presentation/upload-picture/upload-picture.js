@@ -2,8 +2,10 @@ import {isEscKey} from '../utils/utils.js';
 import {
   areHashtagsCorrect,
   hasNoHashtagDuplicates,
-  areHashtagsRightAmount, isCommentCorrect, MAX_COMMENT_SIZE, ZOOM_STEP, ZOOM_MIN, EFFECTS, ZOOM_MAX
+  areHashtagsRightAmount, isCommentCorrect, MAX_COMMENT_SIZE, ZOOM_STEP, ZOOM_MIN, EFFECTS, ZOOM_MAX, uploadPicture
 } from './upload-picture-viewmodel.js';
+
+const documentBody = document.querySelector('body');
 
 const uploadImageElem = document.querySelector('#upload-file');
 const overlayImageElem = document.querySelector('.img-upload__overlay');
@@ -12,6 +14,7 @@ const bnCloseElem = document.querySelector('#upload-cancel');
 const formElem = document.querySelector('.img-upload__form');
 const hashtagInputElem = formElem.querySelector('.text__hashtags');
 const commentInputElem = formElem.querySelector('.text__description');
+const submitButton = formElem.querySelector('.img-upload__submit');
 
 const previewImageElem = overlayImageElem.querySelector('.img-upload__preview');
 
@@ -24,6 +27,10 @@ const sliderElem = overlayImageElem.querySelector('.effect-level__slider');
 const effectLevelElem = overlayImageElem.querySelector('.effect-level__value');
 const sliderFieldElem = overlayImageElem.querySelector('.img-upload__effect-level');
 
+const successfulSubmission = document.querySelector('#success').content.querySelector('.success');
+const errorSubmission = document.querySelector('#error').content.querySelector('.error');
+const successButton = successfulSubmission.querySelector('.success__button');
+const errorButton = errorSubmission.querySelector('.error__button');
 
 const pristine = new Pristine(formElem, {
   classTo: 'img-upload__field-wrapper',
@@ -106,6 +113,66 @@ function onOverlayEscKeydown(evt) {
   }
 }
 
+const disableSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикуем...';
+};
+
+const enableSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const onCloseSuccessSendMsgClickListener = (evt) => {
+  if (evt.target === successfulSubmission) {
+    closeSendMessages();
+  }
+};
+
+const onCloseErrorSendMsgClickListener = (evt) => {
+  if (evt.target === errorSubmission) {
+    closeSendMessages();
+  }
+};
+
+const onErrorSendMsgEscKeydownListener = (evt) => {
+  if (isEscKey(evt.key)) {
+    closeSendMessages();
+  }
+};
+
+function closeSendMessages() {
+  if (documentBody.contains(successfulSubmission)) {
+    documentBody.removeChild(successfulSubmission);
+  }
+  if (documentBody.contains(errorSubmission)) {
+    overlayImageElem.classList.remove('hidden');
+    documentBody.removeChild(errorSubmission);
+  }
+
+  document.removeEventListener('keydown', onErrorSendMsgEscKeydownListener);
+  document.removeEventListener('click', onCloseSuccessSendMsgClickListener);
+  document.removeEventListener('click', onCloseErrorSendMsgClickListener);
+  successButton.removeEventListener('click', closeSendMessages);
+  errorButton.removeEventListener('click', closeSendMessages);
+}
+
+const onSuccess = () => {
+  closeOverlay();
+  enableSubmitButton();
+  successButton.addEventListener('click', closeSendMessages);
+  document.addEventListener('keydown', onErrorSendMsgEscKeydownListener);
+  document.addEventListener('click', onCloseSuccessSendMsgClickListener);
+  documentBody.appendChild(successfulSubmission);
+};
+const onFail = () => {
+  overlayImageElem.classList.add('hidden');
+  enableSubmitButton();
+  errorButton.addEventListener('click', closeSendMessages);
+  document.addEventListener('keydown', onErrorSendMsgEscKeydownListener);
+  document.addEventListener('click', onCloseErrorSendMsgClickListener);
+  documentBody.appendChild(errorSubmission);
+};
 
 const initUploadingFeature = () => {
   uploadImageElem.addEventListener('change', () => {
@@ -124,11 +191,9 @@ const initUploadingFeature = () => {
 
     sliderFieldElem.classList.add('hidden');
     noUiSlider.create(sliderElem, {
-      range: {
-        min: 0,
-        max: 100,
-      },
-      start: 100
+      range: {min: 0, max: 100},
+      start: 100,
+      connect: 'lower'
     });
     sliderElem.noUiSlider.on('update', () => {
       changeEffectIntensity();
@@ -166,8 +231,12 @@ const initUploadingFeature = () => {
   );
 
   formElem.addEventListener('submit', (evt) => {
+    const isValid = pristine.validate();
     evt.preventDefault();
-    pristine.validate();
+    if (isValid) {
+      disableSubmitButton();
+      uploadPicture(onSuccess, onFail, new FormData(evt.target));
+    }
   });
 };
 
