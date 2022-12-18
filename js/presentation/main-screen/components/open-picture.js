@@ -99,7 +99,6 @@ const openPicture = (picture) => {
     bnCommentsLoadElem.classList.remove('hidden');
     bnCommentsLoadElem.addEventListener('click', onClickLoadMoreComments);
   }
-
   addClosePictureListeners();
 };
 
